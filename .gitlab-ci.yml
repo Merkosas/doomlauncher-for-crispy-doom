@@ -8,7 +8,7 @@ build_on_arch:
   
   before_script:
     - pacman -Syu --noconfirm
-    - pacman -S --noconfirm python python-pip python-pyqt6
+    - pacman -S --noconfirm python python-pip python-pyqt6 binutils
 
   script:
     - pip install pyinstaller --break-system-packages
