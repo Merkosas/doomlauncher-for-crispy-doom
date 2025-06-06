@@ -11,7 +11,7 @@ build_on_arch:
     - pacman -S --noconfirm python python-pip python-pyqt6
 
   script:
-    - pip install pyinstaller
+    - pip install pyinstaller --break-system-packages
     - pyinstaller --onefile --windowed --name DoomLauncher-Linux doom_launcher_qt.py
 
   artifacts:
