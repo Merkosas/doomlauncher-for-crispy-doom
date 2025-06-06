@@ -68,7 +68,7 @@ El lanzador incluye una potente herramienta para modificar los controles y opcio
     * **Controles de Teclado y Ratón:** Haz clic en el botón de cualquier control y luego presiona la tecla (o el botón del ratón) que deseas asignar. ¡El programa lo captura automáticamente!
     * **Crear Backup:** Antes de guardar, puedes hacer clic en **"Crear Backup"** para generar una copia de seguridad de tu configuración actual con la fecha y hora. ¡Ideal por si algo sale mal!
 
-![](![Config](Config.png)
+![Config](Config.png)
 
 ## Tecnologías Utilizadas
 
