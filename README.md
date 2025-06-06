@@ -4,7 +4,7 @@ Un lanzador simple y fachero para tus WADs de Doom, con un enfoque especial en m
 
 Con este launcher, configurás tu motor de Doom preferido una sola vez y después solo te dedicás a elegir el WAD y jugar.
 
-![](![Launcher](Launcher.png)  
+![Launcher](Launcher.png)  
 
 ## Características Principales
 
