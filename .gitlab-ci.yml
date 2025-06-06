@@ -1,0 +1,21 @@
+image: archlinux:latest
+
+stages:
+  - build
+
+build_on_arch:
+  stage: build
+  
+  before_script:
+    - pacman -Syu --noconfirm
+    - pacman -S --noconfirm python python-pip python-pyqt6
+
+  script:
+    - pip install pyinstaller
+    - pyinstaller --onefile --windowed --name DoomLauncher-Linux doom_launcher_qt.py
+
+  artifacts:
+    name: "$CI_PROJECT_NAME-Linux-$CI_COMMIT_SHORT_SHA"
+    paths:
+      - dist/
+    expire_in: 1 week
