@@ -65,3 +65,9 @@ Tecnologías Utilizadas
     PyQt6 para la interfaz gráfica.
     PyInstaller para la compilación del ejecutable.
     GitLab CI/CD para la compilación y publicación automática de los releases.
+
+---
+
+## Licencia
+
+Este proyecto está licenciado bajo la GNU General Public License v3.0. Consulta el archivo `LICENSE` para más detalles.
