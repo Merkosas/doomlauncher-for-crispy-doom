@@ -1,10 +1,4 @@
 # Este workflow subirá un paquete de Python a PyPI cuando se cree una release.
-# Para más información, visita: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#publishing-to-package-registries
-
-# Este workflow utiliza actions que no están certificadas por GitHub.
-# Son provistas por un tercero y se rigen por términos de servicio,
-# política de privacidad y documentación de soporte separados.
-
 name: Upload Python Package to PyPI
 
 on:
@@ -19,8 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Clona el repositorio en el runner de Actions.
-      # Esto crea una carpeta llamada 'doomlauncher-for-crispy-doom'.
+      # 1. Clona el repositorio.
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -37,47 +30,41 @@ jobs:
           pip install setuptools wheel
 
       # 4. Construye los paquetes de distribución.
-      # Se ejecuta desde dentro de la carpeta del repo para encontrar 'setup.py'.
+      # Se ejecuta desde la raíz del repo, donde está setup.py.
+      # CORRECCIÓN: Se eliminó la línea "working-directory".
       - name: Build release distributions
-        working-directory: ./doomlauncher-for-crispy-doom
         run: |
           python setup.py sdist bdist_wheel
 
       # 5. Sube los paquetes construidos (la carpeta 'dist') como un artefacto.
-      # Esto permite que el siguiente job ('pypi-publish') pueda descargarlos.
       - name: Upload distributions as an artifact
         uses: actions/upload-artifact@v4
         with:
           name: release-dists
-          path: ./doomlauncher-for-crispy-doom/dist/
+          # CORRECCIÓN: La ruta correcta es simplemente "dist/"
+          path: dist/
 
   pypi-publish:
-    # Este job depende de que 'release-build' termine exitosamente.
     needs:
       - release-build
     runs-on: ubuntu-latest
     permissions:
-      # Este permiso es OBLIGATORIO para la publicación confiable (trusted publishing).
-      id-token: write
+      id-token: write # Necesario para la publicación confiable (trusted publishing).
 
-    # Se recomienda usar entornos dedicados para la publicación.
     environment:
       name: pypi
-      # URL opcional para que aparezca un enlace en los logs de GitHub Actions.
       url: https://pypi.org/p/doomlauncher-for-crispy-doom
 
     steps:
-      # 1. Descarga los artefactos (los paquetes) que el job anterior subió.
+      # 1. Descarga los artefactos que el job anterior subió.
       - name: Retrieve release distributions
         uses: actions/download-artifact@v4
         with:
           name: release-dists
           path: dist/
 
-      # 2. Publica los paquetes en el índice de PyPI.
+      # 2. Publica los paquetes en PyPI.
       - name: Publish release distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          # El directorio de paquetes ahora es 'dist/' en la raíz de este job,
-          # gracias al paso de descarga anterior.
           packages-dir: dist/
