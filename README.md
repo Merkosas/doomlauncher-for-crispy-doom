@@ -1,5 +1,7 @@
 # Lanzador de WADs de Doom
 
+https://gitlab.com/altkern/doomlauncher-for-crispy-doom
+
 Un lanzador simple y fachero para tus WADs de Doom, con un enfoque especial en motores clásicos como Crispy Doom y Chocolate Doom. Se acabó el andar escribiendo comandos en la terminal cada vez que quieres jugar.
 
 Con este launcher, configurás tu motor de Doom preferido una sola vez y después solo te dedicás a elegir el WAD y jugar.
