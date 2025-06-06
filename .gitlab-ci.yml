@@ -1,45 +1,40 @@
-image: archlinux:latest
-
-.build_template: &build_script
-  - pacman -Syu --noconfirm
-  - pacman -S --noconfirm python python-pip python-pyqt6 binutils
-  - pip install pyinstaller --break-system-packages
-  - pyinstaller --onefile --windowed --name DoomLauncher-Linux-$CI_COMMIT_REF_SLUG doom_launcher_qt.py
-
 stages:
   - build
   - release
 
-build_main:
+build:
   stage: build
+  image: archlinux:latest
   script:
-    - *build_script
+    - pacman -Syu --noconfirm
+    - pacman -S --noconfirm python python-pip python-pyqt6 binutils
+    - pip install pyinstaller --break-system-packages
+    - pyinstaller --onefile --windowed --name DoomLauncher-Linux doom_launcher_qt.py
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 day
   rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_TAG'
 
-create_release:
+release:
   stage: release
   image: registry.gitlab.com/gitlab-org/release-cli:latest
+  needs:
+    - job: build
+      artifacts: true
   script:
-    - echo "Creando Release para el tag $CI_COMMIT_TAG"
+    - mv dist/DoomLauncher-Linux dist/DoomLauncher-Linux-$CI_COMMIT_TAG
+  artifacts:
+    paths:
+      - dist/
   release:
     name: 'Release $CI_COMMIT_TAG'
-    description: 'Lanzamiento automático de la versión $CI_COMMIT_TAG'
+    description: 'Lanzamiento de la versión $CI_COMMIT_TAG'
     tag_name: '$CI_COMMIT_TAG'
     assets:
       links:
         - name: 'DoomLauncher-Linux-$CI_COMMIT_TAG'
-          url: '${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/jobs/artifacts/${CI_COMMIT_REF_NAME}/raw/dist/DoomLauncher-Linux-${CI_COMMIT_REF_NAME}?job=build_for_release'
-  rules:
-    - if: $CI_COMMIT_TAG
-
-build_for_release:
-  stage: build
-  script:
-    - *build_script
-  artifacts:
-    paths:
-      - dist/
-    expire_in: 7 days
+          filepath: '/dist/DoomLauncher-Linux-$CI_COMMIT_TAG'
   rules:
     - if: $CI_COMMIT_TAG
